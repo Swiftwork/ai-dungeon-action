@@ -86,7 +86,7 @@ app.intent('actions.intent.OPTION', async (conv, input, option: string) => {
 
     case 'character':
       conv.data.selection.characterType = option;
-      conv.ask(`Enter your character's name...`);
+      conv.ask(`Tell me ${option}, what is your name?`);
       conv.data.stage = 'name';
       break;
   }
