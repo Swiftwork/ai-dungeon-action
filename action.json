@@ -1,0 +1,53 @@
+{
+  "actions": [
+    {
+      "description": "Start the adventure",
+      "name": "MAIN",
+      "fulfillment": {
+        "conversationName": "ai-dungeon"
+      },
+      "intent": {
+        "name": "actions.intent.MAIN",
+        "trigger": {
+          "queryPatterns": [
+            "talk to AI Dungeon",
+            "play AI Dungeon",
+            "play game AI Dungeon"
+          ]
+        }
+      }
+    },
+    {
+      "description": "Option selection",
+      "name": "OPTION",
+      "fulfillment": {
+        "conversationName": "ai-dungeon"
+      },
+      "intent": {
+        "name": "actions.intent.OPTION"
+      }
+    },
+    {
+      "description": "All other inputs",
+      "name": "INPUT",
+      "fulfillment": {
+        "conversationName": "ai-dungeon"
+      },
+      "intent": {
+        "name": "actions.intent.TEXT"
+      }
+    }
+  ],
+  "conversations": {
+    "ai-dungeon": {
+      "name": "ai-dungeon",
+      "url": "https://us-central1-ai-dungeon-51ec5.cloudfunctions.net/aiDungeon",
+      "inDialogIntents": [
+        {
+          "name": "actions.intent.CANCEL"
+        }
+      ]
+    }
+  },
+  "locale": "en"
+}

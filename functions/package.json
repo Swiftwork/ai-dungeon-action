@@ -1,0 +1,42 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Google Actions fullfilment using ActionsSDK and AI Dungeon's REST API",
+  "keywords": [
+    "Google Actions",
+    "ActionsSDK",
+    "AI Dungeon",
+    "Procedural Generated Game"
+  ],
+  "author": {
+    "name": "Erik Hughes",
+    "email": "erik.hughes@outlook.com",
+    "url": "https://github.com/Swiftwork"
+  },
+  "main": "lib/index.js",
+  "engines": {
+    "node": "8"
+  },
+  "scripts": {
+    "playground": "node playground.js",
+    "lint": "tslint --project tsconfig.json",
+    "build": "tsc",
+    "serve": "npm run build && firebase serve --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "actions-on-google": "^2.12.0",
+    "axios": "^0.19.1",
+    "firebase-admin": "^8.6.0",
+    "firebase-functions": "^3.3.0"
+  },
+  "devDependencies": {
+    "tslint": "^5.12.0",
+    "typescript": "^3.2.2",
+    "firebase-functions-test": "^0.1.6"
+  }
+}

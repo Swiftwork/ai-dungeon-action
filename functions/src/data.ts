@@ -1,0 +1,96 @@
+export const sounds = {
+  welcome: {
+    src:
+      'https://actions.google.com/sounds/v1/crowds/battle_crowd_celebrate_stutter.ogg',
+    start: 0,
+    end: 7000,
+  },
+  fantasy: {
+    src:
+      'https://actions.google.com/sounds/v1/ambiences/daytime_forrest_bonfire.ogg',
+    start: 0,
+    end: 4000,
+  },
+  mystery: {
+    src: 'https://actions.google.com/sounds/v1/weather/thunder_crack.ogg',
+    start: 0,
+    end: 4000,
+  },
+  apocalyptic: {
+    src:
+      'https://actions.google.com/sounds/v1/animals/crows_picking_and_eating.ogg',
+    start: 197500,
+    end: 201500,
+  },
+  zombies: {
+    src: 'https://actions.google.com/sounds/v1/horror/male_zombie_roar.ogg',
+    start: 0,
+    end: 4000,
+  },
+  custom: {
+    src:
+      'https://actions.google.com/sounds/v1/ambiences/carnival_atmosphere.ogg',
+    start: 0,
+    end: 4000,
+  },
+};
+
+export const femaleNouns = [
+  'aunt',
+  'damsel',
+  'daughter',
+  'female',
+  'girl',
+  'lady',
+  'lassie',
+  'matron',
+  'miss',
+  'mother',
+  'mrs.',
+  'ms.',
+  'niece',
+  'she',
+  'spouse',
+  'wife',
+  'woman',
+];
+
+export const speechTiggers = [
+  'add',
+  'announce',
+  'answer',
+  'ask',
+  'bellow',
+  'call',
+  'claim',
+  'complain',
+  'convey',
+  'declare',
+  'deliver',
+  'disclose',
+  'estimate',
+  'exclaims',
+  'express',
+  'mention',
+  'mumble',
+  'mutter',
+  'question',
+  'read',
+  'repeat',
+  'reply',
+  'report',
+  'respond',
+  'reveal',
+  'say',
+  'scream',
+  'screech',
+  'shout',
+  'shriek',
+  'speak',
+  'squeal',
+  'state',
+  'suggest',
+  'tell',
+  'whisper',
+  'yell',
+];
