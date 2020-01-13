@@ -2,43 +2,93 @@ import { Setting, CustomSetting } from './interfaces';
 import { femaleNouns, speechTiggers, sounds } from './data';
 import { OptionItems } from 'actions-on-google/dist/service/actionssdk';
 
-function genderizeQuote(sentence: string, prev: string, next: string): string {
+function quoteFixer(text: string) {
+  const lines = text.split('\n');
+  let quoteCount = 0;
+
+  return lines
+    .map((line, index) => {
+      let newLine = line;
+      quoteCount += (line.match(/"/g) || []).length;
+      const next = lines[index + 1] || '';
+
+      // Quote count is uneven, probably exists on next line
+      if (next.startsWith('"') && quoteCount & 1) {
+        newLine += '"';
+        lines[index + 1] = next.replace(/^"/, '');
+        quoteCount++;
+
+        // Quote count is uneven, probably missing
+      } else if (quoteCount & 1) {
+        newLine += '"';
+        quoteCount++;
+      }
+      return newLine;
+    })
+    .join('\n');
+}
+
+function newLineFixer(text: string) {
+  return text.trim().replace(/\n+/g, '\n');
+}
+
+function splitSentences(text: string) {
+  const sentences = [''];
+  let quoteCount = 0;
+  let index = 0;
+  for (const char of text) {
+    if (char === '"') quoteCount++;
+    if (char === '\n') continue;
+    sentences[index] += char;
+
+    // Outside of quote, create new sentence
+    if (!(quoteCount & 1) && /[.:;]/.test(char)) sentences[++index] = '';
+  }
+
+  return sentences.map(sentence => sentence.trim());
+}
+
+function genderizeQuote(
+  sentence: string,
+  prevFemale: boolean,
+): { sentence: string; female: boolean } {
   // No quote
-  if (!/"/.test(sentence)) return sentence;
+  if (!/"/.test(sentence)) return { sentence, female: prevFemale };
 
-  const quoteRegex = /("[\s\S]+?(?:"|$))/g;
-  const concatNoQuotes = (prev + sentence + next)
-    .replace(quoteRegex, '')
-    .toLowerCase();
-  const female =
-    femaleNouns.some(noun => concatNoQuotes.includes(noun)) &&
-    speechTiggers.some(trigger => concatNoQuotes.includes(trigger));
+  const quoteRegex = /("[\s\S]+?")/g;
+  const noQuotes = sentence.replace(quoteRegex, '').toLowerCase();
+  const female = !noQuotes.length
+    ? prevFemale
+    : femaleNouns.some(noun => noQuotes.includes(noun)) &&
+      speechTiggers.some(trigger => noQuotes.includes(trigger));
 
-  return sentence.replace(
-    quoteRegex,
-    `<voice gender="${female ? 'female' : 'male'}" variant="${
-      female ? 1 : 2
-    }">$1</voice>`,
-  );
+  return {
+    female,
+    sentence: sentence.replace(
+      quoteRegex,
+      `<voice gender="${female ? 'female' : 'male'}" variant="${
+        female ? 1 : 2
+      }">$1</voice>`,
+    ),
+  };
 }
 
 export function analyzeStory(text: string): string {
-  const sentences = text.split(/(?<=[.:;]"?)/g);
+  const sentences = splitSentences(quoteFixer(newLineFixer(text)));
+
+  let prevFemale = false;
 
   return sentences
     .map((sentence, index) => {
       let newSentence = sentence;
 
-      // Change voice based on gender
-      newSentence = genderizeQuote(
-        newSentence,
-        sentences[index - 1] || '',
-        sentences[index + 1] || '',
-      );
+      const genderized = genderizeQuote(newSentence, prevFemale);
+      newSentence = genderized.sentence;
+      prevFemale = genderized.female;
 
       return newSentence;
     })
-    .join('');
+    .join(' ');
 }
 
 export function createAudio(

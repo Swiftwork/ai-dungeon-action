@@ -65,6 +65,7 @@ export const speechTiggers = [
   'claim',
   'complain',
   'convey',
+  'cries',
   'declare',
   'deliver',
   'disclose',
