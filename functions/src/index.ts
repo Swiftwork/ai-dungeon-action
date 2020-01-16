@@ -134,7 +134,16 @@ app.intent('actions.intent.TEXT', async (conv, input) => {
 
       case 'done':
         if (!conv.data.sessionId) throw new Error('No session id stored!');
-        const story = await AIDungeon.respond(input, conv.data.sessionId);
+
+        let text = input;
+
+        const command = text.toLowerCase();
+        if (['tell us more', 'tell me more', 'more story'].includes(command))
+          text = '';
+        if (command === 'revert') text = '/revert';
+        if (command.startsWith('event')) text = text.replace(/^event ?/, '!');
+
+        const story = await AIDungeon.respond(text, conv.data.sessionId);
         conv.ask(`<speak>${analyzeStory(story.value)}</speak>`);
         if (conv.data.prompt < 2) conv.ask('Now what?');
         break;
